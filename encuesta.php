@@ -220,7 +220,7 @@
 		}
 	</script>
 </head>
-<body class="container" onload="loadScreen()">
+<body onload="loadScreen()">
 <?php
 
 include_once "conexionCursosExtension.php";

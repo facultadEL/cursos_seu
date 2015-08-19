@@ -10,13 +10,12 @@ $dniAlumno = $_POST['dniAlumno'];
 
 //$sql = traerSql('*', 'localidad', 'fk_provincia='.$idProvincia);
 //$sql = pg_query("SELECT id_inscriptosxcurso FROM inscripto INNER JOIN inscriptosxcurso ON inscripto.id_inscripto = inscriptosxcurso.fk_inscriptos WHERE dni LIKE UPPER({$dniAlumno})");
-$sql = pg_query("SELECT id_inscripto FROM inscripto WHERE dni = $dniAlumno");
+$sql = pg_query("SELECT id_inscripto FROM inscripto WHERE dni = '$dniAlumno'");
+$idAlumno = 0;
 while($rowID = pg_fetch_array($sql)){
 	$id = $rowID['id_inscripto'];
 	if (!empty($id)) {
 		$idAlumno = $id;
-	}else{
-		$idAlumno = 0;
 	}
 }
 pg_close($conn);
