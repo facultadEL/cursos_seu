@@ -1,0 +1,215 @@
+<html>
+<head>
+<title>Registrar Interesado</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css" href="css/estilos.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+
+function controlVacio(nombreSelector)
+{
+	if($.trim($(nombreSelector).val()) == '')
+	{
+		$('#alertaDatos').attr('hidden',false);
+		$(nombreSelector).css('box-shadow','0px 0px 10px 5px #f24d4d');
+		$(nombreSelector).focus();
+		return false;
+	}
+	return true;
+}
+
+function controlSubmit()
+{
+	if(!controlVacio('#dni')) return false;
+	if(!controlVacio('#nombre')) return false;
+	if(!controlVacio('#apellido')) return false;
+	if(!controlVacio('#caracteristica')) return false;
+	if(!controlVacio('#telefono')) return false;
+	if(!controlVacio('#mail')) return false;
+
+	return true;
+}
+
+function cargarCursos()
+{
+	$.ajax({
+		type: 'POST',
+		url: 'getCursosInteresado.php',
+		success: function(response)
+		{
+			var datos =  JSON.parse(response);
+			$('#estaEnSistema').val(datos.enSistema);
+			$('#esInscripto').val(datos.esInscripto);
+			if(datos.enSistema == '1')
+			{
+				$('#nombre').val(datos.nombre);
+				$('#apellido').val(datos.apellido);
+				$('#direccion').val(datos.direccion);
+				$('#numero').val(datos.numero);
+				$('#caracteristica').val(datos.caracteristica);
+				$('#telefono').val(datos.telefono);
+				$('#mail').val(datos.mail);
+			}
+		},
+		error: function(msg)
+		{
+			alert('Contactese con el administrador');
+		}
+	});
+}
+
+function checkDNI()
+{
+	var dniInteresado = $('#dni').val();
+
+	var param = {
+		'parametros':dniInteresado
+	}
+
+	$.ajax({
+		type:'POST',
+		data: param,
+		url: 'checkInteresadoExiste.php',
+		success: function(response)
+		{
+
+		},
+		error: function(msg)
+		{
+			alert('Contactar con el administrador');
+		}
+	});
+}
+
+
+function sacarColor(me)
+{
+	hideAlerts();
+	$(me).css('box-shadow','0px 0px 10px 1px #ccc');
+}
+
+function hideAlerts()
+{
+	$('#alertaDatos').attr('hidden', true);
+}
+
+$(document).ready(function(){
+	//cargarCursos();
+	hideAlerts();
+});
+
+</script>
+</head>
+<body>
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Registrar Interesado</h3>
+			</div>
+
+			<div class="panel-body panel_body">
+				<form name="f1" id="form2" action="guardarinteresado.php" onsubmit="return controlSubmit();" method="post" class="form-horizontal col-xs-12 col-sm-12 col-md-12 col-lg-12 formNuevaVisita">
+					<input type="hidden" name="estaEnSistema" id="estaEnSistema" value="0" />
+					<input type="hidden" name="esInscripto" id="esInscripto" value="0" />
+					<div class="row">
+						<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+							<div class="alert alert-danger text-center" id="alertaDatos">
+								<strong>Atenci&oacute;n:</strong> Faltan agregar datos.
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<legend class="text-left"><h4 class="text-left">Datos del interesado</h4></legend>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+							<label for="dni" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">DNI:</label>
+							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="dni" type="text" id="dni" onkeydown="sacarColor(this)" onblur="checkDNI()" required />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+							<label for="nombre" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Nombre:</label>
+							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="nombre" type="text" id="nombre" onkeydown="sacarColor(this)" required /></div>
+							
+							<label for="apellido" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Apellido:</label>
+							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="apellido" type="text" id="apellido" onkeydown="sacarColor(this)" required /></div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+							<label for="direccion" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Direcci&oacute;n:</label>
+							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="direccion" type="text" id="direccion" onkeydown="sacarColor(this)" /></div>
+							
+							<label for="numero" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">N&uacute;mero:</label>
+							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="numero" type="text" id="numero" onkeydown="sacarColor(this)" /></div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+
+							<label for="caracteristica" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">T&eacute;lefono:</label>
+							<div class="col-xs-3 col-sm-2 col-md-2 col-lg-1"><input class="form-control" name="caracteristica" type="text" pattern="[1-9]{2,4}" placeholder="Sin 0" maxlength="5" id="caracteristica" onkeydown="sacarColor(this)" required /></div>
+							<div class="col-xs-7 col-sm-3 col-md-3 col-lg-3"><input class="form-control" name="telefono" type="text" pattern="[0-9]{6,8}" placeholder="Sin 15" id="telefono" onkeydown="sacarColor(this)" required /></div>
+							<!--label for="telefono" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Tel&eacute;fono:</label>
+							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="telefono" type="text" id="telefono" onkeydown="sacarColor(this)"  /> - <input class="form-control" name="telefono" type="text" id="telefono" onkeydown="sacarColor(this)"  /></div-->
+							
+							<label for="mail" class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-2">E-mail:</label>
+							<div class="col-xs-8 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="mail" type="text" id="mail" onkeydown="sacarColor(this)" required /></div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<legend class="text-left"><h4 class="text-left">Cursos</h4></legend>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+							<label for="curso1" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Curso:</label>
+							<!--div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"><input class="form-control" name="curso1" type="text" id="curso" onkeydown="sacarColor(this)" required /></div-->
+							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+							<select class="form-control" name="curso1" id="curso1">
+								<option>Curso 1</option>
+								<option>Curso 2</option>
+								<option>Curso 3</option>
+								<option>Curso 4</option>
+								<option>Curso 5</option>
+							</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+							<label for="otros" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Otros:</label>
+							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+								<textarea class="form-control" name="otros" rows="3" id="otros" onkeydown="sacarColor(this)"></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+							<p>
+								<center>
+									<!--button type="button" id="agregarAlumno" onclick="volver();" class="btn btn-default submit" title="Salir">Volver</button-->
+									<button type="submit" id="agregarAlumno" class="btn btn-default submit" title="Guardar">Guardar</button>
+								</center>
+							</p>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

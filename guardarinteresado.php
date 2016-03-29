@@ -1,14 +1,16 @@
 <?php
 include "conexionCursosExtension.php";
-$nombre = $_POST['nombre'];
-$apellido = $_POST['apellido'];
-$codigo = $_POST['codigo'];
-$telefono = $_POST['telefono'];
-$mail = $_POST['mail'];
-$direccion = $_POST['direccion'];
-$numero = $_POST['numero'];
-$descripcion = $_POST['descripcion'];
-$tip2 = pg_query($conn , "SELECT COUNT(id_interesado) as contar FROM  interesado where interesado.mail='".$_POST['mail']."';");
+$nombre = empty($_POST['nombre']) ? '' : $_POST['nombre'];
+$apellido = empty($_POST['apellido']) ? '' : $_POST['apellido'];
+$caracteristica = empty($_POST['caracteristica']) ? '' : $_POST['caracteristica'];
+$telefono = empty($_POST['telefono']) ? '' : $_POST['telefono'];
+$mail = empty($_POST['mail']) ? '' : $_POST['mail'];
+$direccion = empty($_POST['direccion']) ? '' : $_POST['direccion'];
+$numero = empty($_POST['numero']) ? '' : $_POST['numero'];
+
+$otros = empty($_POST['otros']) ? '' : $_POST['otros'];
+
+$tip2 = pg_query("SELECT COUNT(id_interesado) as max FROM interesado where interesado.mail='".$_POST['mail']."';");
 	$row2 = pg_fetch_array($tip2);
 //if ($row2["contar"]==0){	
     $tip29 = pg_query($conn,"SELECT MAX(id_interesado) FROM interesado;");
