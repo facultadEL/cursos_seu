@@ -1,0 +1,67 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="popup_files/calendario1.css">
+<style type="text/css">
+html, body, form	{
+	margin: 3;
+	padding: 3;
+	height: 280px;
+}
+
+</style>
+<script type="text/javascript" src="popup_files/calendario.js"></script>
+<script type="text/javascript">
+<!--
+var campoDestino;
+var formDestino;
+function leerDestino()	{
+	url = location.search.substr(1).split("=");
+	Destino = url[1].split(".");
+	formDestino = Destino[0];
+	campoDestino = Destino[1];
+}
+
+
+function seleccionaFecha(dd, mm, aa)	{
+	var volver = aa + "-" + mm + "-" + dd;
+	if (opener)	{
+		opener.document.forms[formDestino][campoDestino].value = volver;
+		window.close();
+	}
+	else	alert("año: " + aa + "\nmes: " + mm + "\ndia: " + dd);
+}
+
+window.onload = leerDestino;
+-->
+</script>
+<!--body onload="leerDestino()"-->
+</head><body onLoad="leerDestino()">
+<script type="text/javascript">
+<!--
+document.writeln(calendar(_hoy.getMonth(), _hoy.getFullYear(), "calendario1", "seleccionaFecha"));
+//-->
+</script><form name="calendario1"><input name="resultado" id="resultado" value="seleccionaFecha" type="hidden">
+<table width="215" border="0" cellpadding="0" cellspacing="0" cols="7" id="calendario1" style="width: 50px;">
+  <thead id="calendario1_thead"><tr><th colspan="7"><button type="button" class="flecha" onClick="antMes(aaaa.value, mes.value, this.form)">&lt;</button><select name="mes" onChange="mostrarDias(aaaa.value, this.value, this.form.name)"><option value="1"> enero</option>
+<option value="2"> febrero</option>
+<option value="3"> marzo</option>
+<option value="4"> abril</option>
+<option value="5"> mayo</option>
+<option value="6"> junio</option>
+<option value="7"> julio</option>
+<option value="8"> agosto</option>
+<option value="9"> septiembre</option>
+<option value="10"> octubre</option>
+<option value="11"> noviembre</option>
+<option value="12" selected="selected"> diciembre</option>
+</select><button type="button" class="flecha" onClick="sigMes(aaaa.value, mes.value, this.form)">&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="flecha" onClick="--aaaa.value; mostrarDias(aaaa.value, mes.value, this.form.name)">&lt;</button><input size="2" name="aaaa" value="2010" type="text"><button type="button" class="flecha" onClick="++aaaa.value; mostrarDias(aaaa.value, mes.value, this.form.name)">&gt;</button></th></tr><tr><th class="dia" width="30">L</th>
+<th class="dia" width="30">M</th>
+<th class="dia" width="30">X</th>
+<th class="dia" width="30">J</th>
+<th class="dia" width="30">V</th>
+<th class="dia" width="30">S</th>
+<th width="31" bordercolor="#000000" class="dia">D</th>
+</tr></thead><tbody style="border: 2px solid gray;"><tr></tr><tr><td></td><td></td><td style="text-align: center;"><button class="normal" value="1" type="button">1</button></td><td style="text-align: center;"><button class="normal" value="2" type="button">2</button></td><td style="text-align: center;"><button class="normal" value="3" type="button">3</button></td><td style="text-align: center;"><button class="normal" value="4" type="button">4</button></td><td bordercolor="#000000" style="text-align: center;"><button class="domingo" value="5" type="button">5</button></td></tr><tr><td style="text-align: center;"><button class="normal" value="6" type="button">6</button></td><td style="text-align: center;"><button class="hoy" value="7" type="button">7</button></td><td style="text-align: center;"><button class="normal" value="8" type="button">8</button></td><td style="text-align: center;"><button class="normal" value="9" type="button">9</button></td><td style="text-align: center;"><button class="normal" value="10" type="button">10</button></td><td style="text-align: center;"><button class="normal" value="11" type="button">11</button></td><td bordercolor="#000000" style="text-align: center;"><button class="domingo" value="12" type="button">12</button></td></tr><tr><td style="text-align: center;"><button class="normal" value="13" type="button">13</button></td><td style="text-align: center;"><button class="normal" value="14" type="button">14</button></td><td style="text-align: center;"><button class="normal" value="15" type="button">15</button></td><td style="text-align: center;"><button class="normal" value="16" type="button">16</button></td><td style="text-align: center;"><button class="normal" value="17" type="button">17</button></td><td style="text-align: center;"><button class="normal" value="18" type="button">18</button></td><td bordercolor="#000000" style="text-align: center;"><button class="domingo" value="19" type="button">19</button></td></tr><tr><td style="text-align: center;"><button class="normal" value="20" type="button">20</button></td><td style="text-align: center;"><button class="normal" value="21" type="button">21</button></td><td style="text-align: center;"><button class="normal" value="22" type="button">22</button></td><td style="text-align: center;"><button class="normal" value="23" type="button">23</button></td><td style="text-align: center;"><button class="normal" value="24" type="button">24</button></td><td style="text-align: center;"><button class="normal" value="25" type="button">25</button></td><td bordercolor="#000000" style="text-align: center;"><button class="domingo" value="26" type="button">26</button></td></tr><tr><td style="text-align: center;"><button class="normal" value="27" type="button">27</button></td><td style="text-align: center;"><button class="normal" value="28" type="button">28</button></td><td style="text-align: center;"><button class="normal" value="29" type="button">29</button></td><td style="text-align: center;"><button class="normal" value="30" type="button">30</button></td><td style="text-align: center;"><button class="normal" value="31" type="button">31</button></td></tr></tbody></table></form>
+
+
+</body></html>
