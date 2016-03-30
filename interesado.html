@@ -9,6 +9,12 @@
 <script src="js/bootstrap.min.js"></script>
 <script>
 
+var htmlCurso = '';
+var afterName = '#headCursos';
+var cantCurso = 0;
+var htmlOptions = '';
+var valuesElegidos = [];
+
 function controlVacio(nombreSelector)
 {
 	if($.trim($(nombreSelector).val()) == '')
@@ -33,6 +39,72 @@ function controlSubmit()
 	return true;
 }
 
+function checkCurso(idSelect)
+{
+	var valSelected =  $(idSelect).val();
+	if(valSelected != 0 && valuesElegidos.indexOf(valSelected) == -1)
+	{
+		valuesElegidos.push(valSelected);
+		addCurso();
+	}
+	else if(valSelected == 0)
+	{
+		removeCurso();
+	}
+}
+
+function removeCurso()
+{
+	var checkNameRemove = `headCurso${cantCurso}`;
+	if(document.getElementById(checkNameRemove) != null && $('#'+checkNameRemove).val() == 0)
+	{
+		$('#'+checkNameRemove).remove();
+		cantCurso--;
+		$('#cantCurso').val(cantCurso);
+		afterName = `#headCurso${cantCurso}`;
+	}
+	redefineArray();
+}
+
+function addCurso()
+{
+	cantCurso++;
+	$('#cantCurso').val(cantCurso);
+
+	htmlCurso = `<div class="row" id="headCurso${cantCurso}"><div class="form-group"><label for="curso${cantCurso}" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Curso:</label>`;
+	htmlCurso += `<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"><select class="form-control" name="curso${cantCurso}" id="curso${cantCurso}" onchange="checkCurso('#curso${cantCurso}')">`;
+	htmlCurso += htmlOptions;
+	htmlCurso += `</select></div></div></div>`;
+
+	$(afterName).after(htmlCurso);
+
+	afterName = `#headCurso${cantCurso}`;
+	redefineArray();
+}
+
+function redefineArray()
+{
+	valuesElegidos = [];
+	for(var i = 1; i <= cantCurso;i++)
+	{
+		var n = `#curso${i}`;
+		if($(n).val() != 0)
+		{
+			valuesElegidos.push($(n).val());
+		}
+	}
+}
+
+function createHtmlOptions(cursos)
+{
+	htmlOptions += '<option value="0">Seleccione un Curso</option>';
+	for(var i = 0; i < cursos.length; i++)
+	{
+		htmlOptions += `<option value="${cursos[i].id}">${cursos[i].nombre}</option>`;
+	}
+	addCurso();
+}
+
 function cargarCursos()
 {
 	$.ajax({
@@ -40,19 +112,9 @@ function cargarCursos()
 		url: 'getCursosInteresado.php',
 		success: function(response)
 		{
-			var datos =  JSON.parse(response);
-			$('#estaEnSistema').val(datos.enSistema);
-			$('#esInscripto').val(datos.esInscripto);
-			if(datos.enSistema == '1')
-			{
-				$('#nombre').val(datos.nombre);
-				$('#apellido').val(datos.apellido);
-				$('#direccion').val(datos.direccion);
-				$('#numero').val(datos.numero);
-				$('#caracteristica').val(datos.caracteristica);
-				$('#telefono').val(datos.telefono);
-				$('#mail').val(datos.mail);
-			}
+			var cursosJSON =  JSON.parse(response);
+			console.log(cursosJSON);
+			createHtmlOptions(cursosJSON);
 		},
 		error: function(msg)
 		{
@@ -64,24 +126,38 @@ function cargarCursos()
 function checkDNI()
 {
 	var dniInteresado = $('#dni').val();
-
-	var param = {
-		'parametros':dniInteresado
-	}
-
-	$.ajax({
-		type:'POST',
-		data: param,
-		url: 'checkInteresadoExiste.php',
-		success: function(response)
-		{
-
-		},
-		error: function(msg)
-		{
-			alert('Contactar con el administrador');
+	if(dniInteresado != '')
+	{
+		var param = {
+			'dni':dniInteresado
 		}
-	});
+
+		$.ajax({
+			type:'POST',
+			data: param,
+			url: 'checkInteresadoExiste.php',
+			success: function(response)
+			{
+				var datos =  JSON.parse(response);
+				$('#estaEnSistema').val(datos.enSistema);
+				$('#esInscripto').val(datos.esInscripto);
+				if(datos.enSistema == '1')
+				{
+					$('#nombre').val(datos.nombre);
+					$('#apellido').val(datos.apellido);
+					$('#direccion').val(datos.direccion);
+					$('#numero').val(datos.numero);
+					$('#caracteristica').val(datos.caracteristica);
+					$('#telefono').val(datos.telefono);
+					$('#mail').val(datos.mail);
+				}
+			},
+			error: function(msg)
+			{
+				alert('Contactar con el administrador');
+			}
+		});
+	}
 }
 
 
@@ -97,7 +173,7 @@ function hideAlerts()
 }
 
 $(document).ready(function(){
-	//cargarCursos();
+	cargarCursos();
 	hideAlerts();
 });
 
@@ -114,6 +190,7 @@ $(document).ready(function(){
 				<form name="f1" id="form2" action="guardarinteresado.php" onsubmit="return controlSubmit();" method="post" class="form-horizontal col-xs-12 col-sm-12 col-md-12 col-lg-12 formNuevaVisita">
 					<input type="hidden" name="estaEnSistema" id="estaEnSistema" value="0" />
 					<input type="hidden" name="esInscripto" id="esInscripto" value="0" />
+					<input type="hidden" name="cantCursos" id="cantCursos" value="0" />
 					<div class="row">
 						<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
 							<div class="alert alert-danger text-center" id="alertaDatos">
@@ -167,24 +244,8 @@ $(document).ready(function(){
 						</div>
 					</div>
 					
-					<div class="row">
+					<div class="row" id="headCursos">
 						<legend class="text-left"><h4 class="text-left">Cursos</h4></legend>
-					</div>
-
-					<div class="row">
-						<div class="form-group">
-							<label for="curso1" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Curso:</label>
-							<!--div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"><input class="form-control" name="curso1" type="text" id="curso" onkeydown="sacarColor(this)" required /></div-->
-							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-							<select class="form-control" name="curso1" id="curso1">
-								<option>Curso 1</option>
-								<option>Curso 2</option>
-								<option>Curso 3</option>
-								<option>Curso 4</option>
-								<option>Curso 5</option>
-							</select>
-							</div>
-						</div>
 					</div>
 
 					<div class="row">
