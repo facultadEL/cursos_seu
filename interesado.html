@@ -32,15 +32,24 @@ function controlSubmit()
 	if(!controlVacio('#dni')) return false;
 	if(!controlVacio('#nombre')) return false;
 	if(!controlVacio('#apellido')) return false;
-	if(!controlVacio('#caracteristica')) return false;
-	if(!controlVacio('#telefono')) return false;
+	//if(!controlVacio('#caracteristica')) return false;
+	//if(!controlVacio('#telefono')) return false;
 	if(!controlVacio('#mail')) return false;
+
+	var otrosValues = $('#otros').val().trim();
+
+	if(cantCurso == 1 && otrosValues == "")
+	{
+		$('#alertaCurso').attr('hidden',false);
+		return false;
+	}
 
 	return true;
 }
 
 function checkCurso(idSelect)
 {
+	$('#alertaDatos').attr('hidden',true);
 	var valSelected =  $(idSelect).val();
 	if(valSelected != 0 && valuesElegidos.indexOf(valSelected) == -1)
 	{
@@ -60,7 +69,7 @@ function removeCurso()
 	{
 		$('#'+checkNameRemove).remove();
 		cantCurso--;
-		$('#cantCurso').val(cantCurso);
+		$('#cantCursos').val(cantCurso);
 		afterName = `#headCurso${cantCurso}`;
 	}
 	redefineArray();
@@ -69,7 +78,7 @@ function removeCurso()
 function addCurso()
 {
 	cantCurso++;
-	$('#cantCurso').val(cantCurso);
+	$('#cantCursos').val(cantCurso);
 
 	htmlCurso = `<div class="row" id="headCurso${cantCurso}"><div class="form-group"><label for="curso${cantCurso}" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Curso:</label>`;
 	htmlCurso += `<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"><select class="form-control" name="curso${cantCurso}" id="curso${cantCurso}" onchange="checkCurso('#curso${cantCurso}')">`;
@@ -139,17 +148,19 @@ function checkDNI()
 			success: function(response)
 			{
 				var datos =  JSON.parse(response);
-				$('#estaEnSistema').val(datos.enSistema);
-				$('#esInscripto').val(datos.esInscripto);
-				if(datos.enSistema == '1')
+				$('#estaEnSistema').val(datos[0].enSistema);
+				$('#esInscripto').val(datos[0].esInscripto);
+				if(datos[0].enSistema == '1')
 				{
-					$('#nombre').val(datos.nombre);
-					$('#apellido').val(datos.apellido);
-					$('#direccion').val(datos.direccion);
-					$('#numero').val(datos.numero);
-					$('#caracteristica').val(datos.caracteristica);
-					$('#telefono').val(datos.telefono);
-					$('#mail').val(datos.mail);
+					$('#nombre').val(datos[0].nombre);
+					$('#apellido').val(datos[0].apellido);
+					$('#direccion').val(datos[0].direccion);
+					$('#numero').val(datos[0].numero);
+					$('#caracteristicaCasa').val(datos[0].caracteristicaCasa);
+					$('#telefonoCasa').val(datos[0].telefonoCasa);
+					$('#caracteristicaCel').val(datos[0].caracteristicaCel);
+					$('#telefonoCel').val(datos[0].telefonoCel);
+					$('#mail').val(datos[0].mail);
 				}
 			},
 			error: function(msg)
@@ -170,6 +181,7 @@ function sacarColor(me)
 function hideAlerts()
 {
 	$('#alertaDatos').attr('hidden', true);
+	$('#alertaCurso').attr('hidden', true);
 }
 
 $(document).ready(function(){
@@ -200,6 +212,14 @@ $(document).ready(function(){
 					</div>
 
 					<div class="row">
+						<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+							<div class="alert alert-danger text-center" id="alertaCurso">
+								<strong>Atenci&oacute;n:</strong> Debe seleccionar o agregar un curso.
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
 						<legend class="text-left"><h4 class="text-left">Datos del interesado</h4></legend>
 					</div>
 
@@ -207,6 +227,7 @@ $(document).ready(function(){
 						<div class="form-group">
 							<label for="dni" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">DNI:</label>
 							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="dni" type="text" id="dni" onkeydown="sacarColor(this)" onblur="checkDNI()" required />
+							</div>
 						</div>
 					</div>
 
@@ -233,14 +254,23 @@ $(document).ready(function(){
 					<div class="row">
 						<div class="form-group">
 
-							<label for="caracteristica" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">T&eacute;lefono:</label>
-							<div class="col-xs-3 col-sm-2 col-md-2 col-lg-1"><input class="form-control" name="caracteristica" type="text" pattern="[1-9]{2,4}" placeholder="Sin 0" maxlength="5" id="caracteristica" onkeydown="sacarColor(this)" required /></div>
-							<div class="col-xs-7 col-sm-3 col-md-3 col-lg-3"><input class="form-control" name="telefono" type="text" pattern="[0-9]{6,8}" placeholder="Sin 15" id="telefono" onkeydown="sacarColor(this)" required /></div>
-							<!--label for="telefono" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Tel&eacute;fono:</label>
-							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="telefono" type="text" id="telefono" onkeydown="sacarColor(this)"  /> - <input class="form-control" name="telefono" type="text" id="telefono" onkeydown="sacarColor(this)"  /></div-->
-							
+							<label for="caracteristicaCasa" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">T&eacute;lefono Casa:</label>
+							<div class="col-xs-3 col-sm-2 col-md-2 col-lg-1"><input class="form-control" name="caracteristicaCasa" type="text" pattern="[1-9]{2,4}" placeholder="Sin 0" maxlength="5" id="caracteristicaCasa" onkeydown="sacarColor(this)" /></div>
+							<div class="col-xs-7 col-sm-3 col-md-3 col-lg-3"><input class="form-control" name="telefonoCasa" type="text" pattern="[0-9]{6,8}" placeholder="Sin 15" id="telefonoCasa" onkeydown="sacarColor(this)" /></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group">
+
+							<label for="caracteristicaCel" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">T&eacute;lefono Celular:</label>
+							<div class="col-xs-3 col-sm-2 col-md-2 col-lg-1"><input class="form-control" name="caracteristicaCel" type="text" pattern="[1-9]{2,4}" placeholder="Sin 0" maxlength="5" id="caracteristicaCel" onkeydown="sacarColor(this)" /></div>
+							<div class="col-xs-7 col-sm-3 col-md-3 col-lg-3"><input class="form-control" name="telefonoCel" type="text" pattern="[0-9]{6,8}" placeholder="Sin 15" id="telefonoCel" onkeydown="sacarColor(this)" /></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group">
 							<label for="mail" class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-2">E-mail:</label>
-							<div class="col-xs-8 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="mail" type="text" id="mail" onkeydown="sacarColor(this)" required /></div>
+							<div class="col-xs-8 col-sm-10 col-md-10 col-lg-10"><input class="form-control" name="mail" type="text" id="mail" onkeydown="sacarColor(this)" required /></div>
 						</div>
 					</div>
 					
@@ -250,10 +280,8 @@ $(document).ready(function(){
 
 					<div class="row">
 						<div class="form-group">
-							<label for="otros" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Otros:</label>
-							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-								<textarea class="form-control" name="otros" rows="3" id="otros" onkeydown="sacarColor(this)"></textarea>
-							</div>
+							<label for="otros" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Otro:</label>
+							<div class="col-xs-8 col-sm-10 col-md-10 col-lg-10"><input class="form-control" name="otros" type="text" id="otros" onkeydown="sacarColor(this)" /></div>
 						</div>
 					</div>
 
