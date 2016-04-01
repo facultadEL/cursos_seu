@@ -18,6 +18,8 @@ $telefonoCel = empty($_POST['telefonoCel']) ? '' : $_POST['telefonoCel'];
 
 $otros = empty($_POST['otros']) ? '' : $_POST['otros'];
 
+$fechaActual = date('Y-m-d');
+
 //Si exites y es inscripto crear nuevo interesado
 //Si no exites crear nuevo interesado
 //Si existe y no es inscripto hacer un update
@@ -34,7 +36,7 @@ if($esInscripto == "1")
 	$rIdInt = pg_fetch_array($sIdInt);
 	$idInt = $rIdInt['max'] + 1;
 
-	$cCrearInt = "INSERT INTO interesado(id_interesado,nombre,apellido,direccion,numero,caracteristicaCasa,telefonoCasa,caracteristicaCel,telefonoCel,dni,localidad) VALUES('$idInt','$nombre','$apellido','$direccion','$numero','$caracteristicaCasa','$telefonoCasa','$caracteristicaCel','$telefonoCel','$dni','$localidad');";
+	$cCrearInt = "INSERT INTO interesado(id_interesado,nombre,apellido,direccion,numero,caracteristicaCasa,telefonoCasa,caracteristicaCel,telefonoCel,dni,localidad,fecharegistro) VALUES('$idInt','$nombre','$apellido','$direccion','$numero','$caracteristicaCasa','$telefonoCasa','$caracteristicaCel','$telefonoCel','$dni','$localidad','$fechaActual');";
 }
 else if($esInscripto == "0")
 {
@@ -43,7 +45,7 @@ else if($esInscripto == "0")
 	$rIdInt = pg_fetch_array($sIdInt);
 	$idInt = $rIdInt['id_interesado'];
 
-	$cCrearInt = "UPDATE interesado SET nombre='$nombre',apellido='$apellido',direccion='$direccion',numero='$numero',caracteristicaCasa='$caracteristicaCasa',telefonoCasa='$telefonoCasa',caracteristicaCel='$caracteristicaCel',telefonoCel='$telefonoCel',mail='$mail',localidad='$localidad' WHERE id_interesado='$idInt';";
+	$cCrearInt = "UPDATE interesado SET nombre='$nombre',apellido='$apellido',direccion='$direccion',numero='$numero',caracteristicaCasa='$caracteristicaCasa',telefonoCasa='$telefonoCasa',caracteristicaCel='$caracteristicaCel',telefonoCel='$telefonoCel',mail='$mail',localidad='$localidad',fecharegistro='$fechaActual' WHERE id_interesado='$idInt';";
 }
 
 $cCrearCurso = "";
