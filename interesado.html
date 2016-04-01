@@ -152,6 +152,7 @@ function checkDNI()
 				$('#esInscripto').val(datos[0].esInscripto);
 				if(datos[0].enSistema == '1')
 				{
+					$('#dni').attr('disabled',true);
 					$('#nombre').val(datos[0].nombre);
 					$('#apellido').val(datos[0].apellido);
 					$('#direccion').val(datos[0].direccion);
@@ -161,6 +162,7 @@ function checkDNI()
 					$('#caracteristicaCel').val(datos[0].caracteristicaCel);
 					$('#telefonoCel').val(datos[0].telefonoCel);
 					$('#mail').val(datos[0].mail);
+					$('#localidad').val(datos[0].localidad);
 				}
 			},
 			error: function(msg)
@@ -248,6 +250,13 @@ $(document).ready(function(){
 							
 							<label for="numero" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">N&uacute;mero:</label>
 							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="numero" type="text" id="numero" onkeydown="sacarColor(this)" /></div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group">
+							<label for="localidad" class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-2">Localidad:</label>
+							<div class="col-xs-8 col-sm-10 col-md-10 col-lg-10"><input class="form-control" name="localidad" type="text" id="localidad" onkeydown="sacarColor(this)" required /></div>
 						</div>
 					</div>
 

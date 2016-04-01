@@ -24,6 +24,7 @@ if($r['contar'] != 0)
 	$caracteristicaCel = empty($rInteresado['caracteristicacel']) ? "" : $rInteresado['caracteristicacel'];
 	$telefonoCel = empty($rInteresado['telefonocel']) ? "" : $rInteresado['telefonocel'];
 	$mail = empty($rInteresado['mail']) ? "" : $rInteresado['mail'];
+	$localidad = empty($rInteresado['localidad']) ? "" : $rInteresado['localidad'];
 }
 else
 {
@@ -50,19 +51,7 @@ else
 		$telefonoCel = "";
 
 		$mail = empty($rInscripto['mail']) ? "" : $rInscripto['mail'];
-		/*
-		nombre text,
-		apellido text,
-		telfijo text,
-		mail text,
-		direccion text,
-		numero integer,
-		dni integer,
-		fechainscripto date,
-		fk_tipodoc integer,
-		localidad text,
-		telcel text,
-		*/
+		$localidad = empty($rInscripto['localidad']) ? "" : $rInscripto['localidad'];
 	}
 	else
 	{
@@ -77,6 +66,7 @@ else
 		$caracteristicaCel = "";
 		$telefonoCel = "";
 		$mail = "";
+		$localidad = "";
 	}
 }
 
@@ -91,7 +81,8 @@ $outJson = '[{
 		"telefonoCasa":"'.$telefonoCasa.'",
 		"caracteristicaCel":"'.$caracteristicaCel.'",
 		"telefonoCel":"'.$telefonoCel.'",
-		"mail":"'.$mail.'"
+		"mail":"'.$mail.'",
+		"localidad":"'.$localidad.'"
 	}]';
 
 echo $outJson;

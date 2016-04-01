@@ -6,9 +6,10 @@ $apellido = empty($_POST['apellido']) ? '' : ucwords(strtolower($_POST['apellido
 $mail = empty($_POST['mail']) ? '' : $_POST['mail'];
 $direccion = empty($_POST['direccion']) ? '' : ucwords(strtolower($_POST['direccion']));
 $numero = empty($_POST['numero']) ? '' : $_POST['numero'];
+$localidad = empty($_POST['localidad']) ? '' : ucwords(strtolower($_POST['localidad']));
 
-$estaEnSistema = $_POST['estaEnSistema'];// ? '' : $_POST['estaEnSistema'];
-$esInscripto = $_POST['esInscripto'];// ? '' : $_POST['esInscripto'];
+$estaEnSistema = $_POST['estaEnSistema'];
+$esInscripto = $_POST['esInscripto'];
 $cantCursos = empty($_POST['cantCursos']) ? '' : $_POST['cantCursos'];
 $caracteristicaCasa = empty($_POST['caracteristicaCasa']) ? '' : $_POST['caracteristicaCasa'];
 $telefonoCasa = empty($_POST['telefonoCasa']) ? '' : $_POST['telefonoCasa'];
@@ -33,7 +34,7 @@ if($esInscripto == "1")
 	$rIdInt = pg_fetch_array($sIdInt);
 	$idInt = $rIdInt['max'] + 1;
 
-	$cCrearInt = "INSERT INTO interesado(id_interesado,nombre,apellido,direccion,numero,caracteristicaCasa,telefonoCasa,caracteristicaCel,telefonoCel,dni) VALUES('$idInt','$nombre','$apellido','$direccion','$numero','$caracteristicaCasa','$telefonoCasa','$caracteristicaCel','$telefonoCel','$dni');";
+	$cCrearInt = "INSERT INTO interesado(id_interesado,nombre,apellido,direccion,numero,caracteristicaCasa,telefonoCasa,caracteristicaCel,telefonoCel,dni,localidad) VALUES('$idInt','$nombre','$apellido','$direccion','$numero','$caracteristicaCasa','$telefonoCasa','$caracteristicaCel','$telefonoCel','$dni','$localidad');";
 }
 else if($esInscripto == "0")
 {
@@ -42,7 +43,7 @@ else if($esInscripto == "0")
 	$rIdInt = pg_fetch_array($sIdInt);
 	$idInt = $rIdInt['id_interesado'];
 
-	$cCrearInt = "UPDATE interesado SET nombre='$nombre',apellido='$apellido',direccion='$direccion',numero='$numero',caracteristicaCasa='$caracteristicaCasa',telefonoCasa='$telefonoCasa',caracteristicaCel='$caracteristicaCel',telefonoCel='$telefonoCel',mail='$mail' WHERE id_interesado='$idInt';";
+	$cCrearInt = "UPDATE interesado SET nombre='$nombre',apellido='$apellido',direccion='$direccion',numero='$numero',caracteristicaCasa='$caracteristicaCasa',telefonoCasa='$telefonoCasa',caracteristicaCel='$caracteristicaCel',telefonoCel='$telefonoCel',mail='$mail',localidad='$localidad' WHERE id_interesado='$idInt';";
 }
 
 $cCrearCurso = "";
