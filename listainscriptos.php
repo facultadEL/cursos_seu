@@ -71,7 +71,7 @@ function evaluaring(academico)
             <?php
 			
                                          include_once "conexionCursosExetnsion.php";										 		
-                                                 $tip1 = pg_query($conn,"SELECT anio FROM cursos group by anio;");
+                                                 $tip1 = pg_query($conn,"SELECT anio FROM cursos group by anio order by anio asc;");
                                                   while($row1 = pg_fetch_array($tip1)){
 													  if(strcmp($row1["anio"],$anio)==0){
                                             $seleccionado = " selected";}
