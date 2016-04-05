@@ -32,6 +32,7 @@ $fechaActual = date('Y-m-d');
 $idInt = 0;
 if($esInscripto == "1" || $estaEnSistema == "0")
 {
+	$actualiza = false;
 	$cIdInt = "SELECT max(id_interesado) FROM interesado;";
 	$sIdInt = pg_query($cIdInt);
 	$rIdInt = pg_fetch_array($sIdInt);
@@ -41,6 +42,7 @@ if($esInscripto == "1" || $estaEnSistema == "0")
 }
 else if($esInscripto == "0" && $estaEnSistema == "1")
 {
+	$actualiza = true;
 	$cIdInt = "SELECT id_interesado FROM interesado WHERE dni='$dni';";
 	$sIdInt = pg_query($cIdInt);
 	$rIdInt = pg_fetch_array($sIdInt);
@@ -101,7 +103,14 @@ pg_query($termino);
 if ($error==1){
 	echo '<script language="JavaScript"> alert("Los datos no se modificaron correctamente. Pongase en contacto con el administrador");window.location="interesado.html"</script>';
 }else{
-	echo '<script language="JavaScript"> alert("Los datos se actualizaron correctamente."); window.location = "interesado.html";</script>';
+	if($actualiza)
+	{
+		echo '<script language="JavaScript"> alert("Los datos se actualizaron correctamente."); window.location = "interesado.html";</script>';
+	}
+	else
+	{
+		echo '<script language="JavaScript"> alert("Los datos se han guardado correctamente."); window.location = "interesado.html";</script>';	
+	}
 }
 
 
