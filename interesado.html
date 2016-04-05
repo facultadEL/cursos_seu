@@ -153,6 +153,7 @@ function checkDNI()
 				if(datos[0].enSistema == '1')
 				{
 					$('#dni').attr('disabled',true);
+					$('#dniSearch').val(dniInteresado);
 					$('#nombre').val(datos[0].nombre);
 					$('#apellido').val(datos[0].apellido);
 					$('#direccion').val(datos[0].direccion);
@@ -205,6 +206,7 @@ $(document).ready(function(){
 					<input type="hidden" name="estaEnSistema" id="estaEnSistema" value="0" />
 					<input type="hidden" name="esInscripto" id="esInscripto" value="0" />
 					<input type="hidden" name="cantCursos" id="cantCursos" value="0" />
+					<input type="hidden" name="dniSearch" id="dniSearch" value="" />
 					<div class="row">
 						<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
 							<div class="alert alert-danger text-center" id="alertaDatos">

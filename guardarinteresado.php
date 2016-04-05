@@ -1,16 +1,17 @@
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <?php
 include "conexionCursosExtension.php";
-$dni = empty($_POST['dni']) ? '' : $_POST['dni'];
+$dni = empty($_POST['dniSearch']) ? '' : $_POST['dniSearch'];
 $nombre = empty($_POST['nombre']) ? '' : ucwords(strtolower($_POST['nombre']));
 $apellido = empty($_POST['apellido']) ? '' : ucwords(strtolower($_POST['apellido']));
 $mail = empty($_POST['mail']) ? '' : $_POST['mail'];
 $direccion = empty($_POST['direccion']) ? '' : ucwords(strtolower($_POST['direccion']));
-$numero = empty($_POST['numero']) ? '' : $_POST['numero'];
+$numero = empty($_POST['numero']) ? 0 : $_POST['numero'];
 $localidad = empty($_POST['localidad']) ? '' : ucwords(strtolower($_POST['localidad']));
 
 $estaEnSistema = $_POST['estaEnSistema'];
 $esInscripto = $_POST['esInscripto'];
-$cantCursos = empty($_POST['cantCursos']) ? '' : $_POST['cantCursos'];
+$cantCursos = empty($_POST['cantCursos']) ? 0 : $_POST['cantCursos'];
 $caracteristicaCasa = empty($_POST['caracteristicaCasa']) ? '' : $_POST['caracteristicaCasa'];
 $telefonoCasa = empty($_POST['telefonoCasa']) ? '' : $_POST['telefonoCasa'];
 $caracteristicaCel = empty($_POST['caracteristicaCel']) ? '' : $_POST['caracteristicaCel'];
@@ -29,16 +30,16 @@ $fechaActual = date('Y-m-d');
 //Agregar id cursos e id interesado a tabla intermedia
 
 $idInt = 0;
-if($esInscripto == "1")
+if($esInscripto == "1" || $estaEnSistema == "0")
 {
 	$cIdInt = "SELECT max(id_interesado) FROM interesado;";
 	$sIdInt = pg_query($cIdInt);
 	$rIdInt = pg_fetch_array($sIdInt);
 	$idInt = $rIdInt['max'] + 1;
 
-	$cCrearInt = "INSERT INTO interesado(id_interesado,nombre,apellido,direccion,numero,caracteristicaCasa,telefonoCasa,caracteristicaCel,telefonoCel,dni,localidad,fecharegistro) VALUES('$idInt','$nombre','$apellido','$direccion','$numero','$caracteristicaCasa','$telefonoCasa','$caracteristicaCel','$telefonoCel','$dni','$localidad','$fechaActual');";
+	$cCrearInt = "INSERT INTO interesado(id_interesado,nombre,apellido,direccion,numero,caracteristicaCasa,telefonoCasa,caracteristicaCel,telefonoCel,dni,localidad,fecharegistro,mail) VALUES('$idInt','$nombre','$apellido','$direccion','$numero','$caracteristicaCasa','$telefonoCasa','$caracteristicaCel','$telefonoCel','$dni','$localidad','$fechaActual','$mail');";
 }
-else if($esInscripto == "0")
+else if($esInscripto == "0" && $estaEnSistema == "1")
 {
 	$cIdInt = "SELECT id_interesado FROM interesado WHERE dni='$dni';";
 	$sIdInt = pg_query($cIdInt);
@@ -102,5 +103,6 @@ if ($error==1){
 }else{
 	echo '<script language="JavaScript"> alert("Los datos se actualizaron correctamente."); window.location = "interesado.html";</script>';
 }
+
 
 ?>
