@@ -14,6 +14,7 @@ var afterName = '#headCursos';
 var cantCurso = 0;
 var htmlOptions = '';
 var valuesElegidos = [];
+var lastSelect = '';
 
 function controlVacio(nombreSelector)
 {
@@ -50,15 +51,23 @@ function controlSubmit()
 function checkCurso(idSelect)
 {
 	$('#alertaDatos').attr('hidden',true);
-	var valSelected =  $(idSelect).val();
-	if(valSelected != 0 && valuesElegidos.indexOf(valSelected) == -1)
+	if(idSelect != lastSelect)
 	{
-		valuesElegidos.push(valSelected);
-		addCurso();
-	}
-	else if(valSelected == 0)
-	{
-		removeCurso();
+		lastSelect = idSelect;
+		var valSelected =  $(idSelect).val();
+		if(valSelected != 0 && valuesElegidos.indexOf(valSelected) == -1)
+		{
+			valuesElegidos.push(valSelected);
+			addCurso();
+		}
+		else if(valSelected == 0)
+		{
+			removeCurso();
+		}
+		else
+		{
+			lastSelect = '';
+		}
 	}
 }
 
