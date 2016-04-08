@@ -11,7 +11,10 @@ while($rowI = pg_fetch_array($sqlInteresado))
 {
 	if($outJson!= '[')
 	{
-		$outJson .= ',';
+		if($cantCursos > 0)
+		{
+			$outJson .= ',';	
+		}
 	}
 
 	$id = $rowI['id_interesado'];
@@ -27,26 +30,31 @@ while($rowI = pg_fetch_array($sqlInteresado))
 	
 	$cursos = "";
 
-	$cC = "SELECT cursointeresado.* FROM cursointeresado INNER JOIN interesadoxcurso ON(interesadoxcurso.curso_fk = cursointeresado.id) WHERE interesadoxcurso.interesado_fk='$id';";
+	$cC = "SELECT cursointeresado.* FROM cursointeresado INNER JOIN interesadoxcurso ON(interesadoxcurso.curso_fk = cursointeresado.id) WHERE interesadoxcurso.interesado_fk='$id' AND anulado IS FALSE;";
 	$sC = pg_query($cC);
+	$cantCursos = 0;
 	while($rC = pg_fetch_array($sC))
 	{
+		$cantCursos++;
 		$cursos .= ($cursos == "") ? "" : '<br />';
 		$cursos .= ucwords(strtolower($rC['nombre']));
 	}
-	
-	$outJson .= '{
-		"apellido":"'.$apellido.'",
-		"nombre":"'.$nombre.'",
-		"caracteristicaCel":"'.$caracCel.'",
-		"telefonoCel":"'.$telCel.'",
-		"caracteristicaCasa":"'.$caracCasa.'",
-		"telefonoCasa":"'.$telCasa.'",
-		"mail":"'.$mail.'",
-		"localidad":"'.$localidad.'",
-		"cursos":"'.$cursos.'",
-		"fechaRegistro":"'.$fechaReg.'"
-	}';
+	if($cantCursos > 0)
+	{
+		$outJson .= '{
+			"id":"'.$id.'",
+			"apellido":"'.$apellido.'",
+			"nombre":"'.$nombre.'",
+			"caracteristicaCel":"'.$caracCel.'",
+			"telefonoCel":"'.$telCel.'",
+			"caracteristicaCasa":"'.$caracCasa.'",
+			"telefonoCasa":"'.$telCasa.'",
+			"mail":"'.$mail.'",
+			"localidad":"'.$localidad.'",
+			"cursos":"'.$cursos.'",
+			"fechaRegistro":"'.$fechaReg.'"
+		}';
+	}
 }
 
 $outJson .= ']';
