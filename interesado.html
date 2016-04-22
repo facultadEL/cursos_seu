@@ -158,6 +158,7 @@ function checkDNI()
 			success: function(response)
 			{
 				var datos =  JSON.parse(response);
+				$('#btnRemove').show();
 				$('#estaEnSistema').val(datos[0].enSistema);
 				$('#esInscripto').val(datos[0].esInscripto);
 				if(datos[0].enSistema == '1')
@@ -197,7 +198,27 @@ function hideAlerts()
 	$('#alertaCurso').attr('hidden', true);
 }
 
+function removeDNI()
+{
+	$('#dni').attr('disabled',false);
+	$('#dni').val('');
+	$('#dniSearch').val('');
+	$('#nombre').val('');
+	$('#apellido').val('');
+	$('#direccion').val('');
+	$('#numero').val('');
+	$('#caracteristicaCasa').val('');
+	$('#telefonoCasa').val('');
+	$('#caracteristicaCel').val('');
+	$('#telefonoCel').val('');
+	$('#mail').val('');
+	$('#localidad').val('');
+	$('#dni').focus();
+	$('#btnRemove').hide();
+}
+
 $(document).ready(function(){
+	$('#btnRemove').hide();
 	cargarCursos();
 	hideAlerts();
 });
@@ -240,8 +261,9 @@ $(document).ready(function(){
 					<div class="row">
 						<div class="form-group">
 							<label for="dni" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">DNI:</label>
-							<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="dni" type="text" id="dni" onkeydown="sacarColor(this)" onblur="checkDNI()" required />
+							<div class="col-xs-9 col-sm-4 col-md-4 col-lg-4"><input class="form-control" name="dni" type="text" id="dni" onkeydown="sacarColor(this)" onblur="checkDNI()" required />
 							</div>
+							<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><i id="btnRemove" class="glyphicon glyphicon-remove-circle" onclick="removeDNI()" style="margin-left: -15px; margin-top: 5px; font-size: 20px"></i></div>
 						</div>
 					</div>
 
