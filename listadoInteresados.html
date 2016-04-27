@@ -69,7 +69,7 @@ function loadTable()
 		var a = interesadosToShow[i];
 
 		var vF = a.fechaRegistro.split('-');
-
+		console.log(a);
 		htmlToAdd += `<tr>`;
 		htmlToAdd += `<td>${a.apellido}, ${a.nombre}</td>`;
 		htmlToAdd += `<td>${a.caracteristicaCel} - ${a.telefonoCel}</td>`;
@@ -78,11 +78,16 @@ function loadTable()
 		htmlToAdd += `<td>${a.localidad}</td>`;
 		htmlToAdd += `<td>${a.cursos}</td>`;
 		htmlToAdd += `<td>${vF[2]}/${vF[1]}/${vF[0]}</td>`;
-		htmlToAdd += `<td><button type="button" class="btn btn-default" onclick="openModalAnular('${i}')"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></td>`;
+		htmlToAdd += `<td><button type="button" class="btn btn-success" onclick="agregarCurso('${a.dni}')"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><button type="button" class="btn btn-danger" onclick="openModalAnular('${i}')"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></td>`;
 		htmlToAdd += `</tr>`;
 	}
 
 	$('#cuerpoTabla').html(htmlToAdd);
+}
+
+function agregarCurso()
+{
+	//window.location.href = "interesado.html?dni=";
 }
 
 function openModalAnular(index)
