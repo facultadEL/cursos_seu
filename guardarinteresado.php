@@ -60,7 +60,7 @@ for($i = 1; $i <= $cantCursos; $i++)
 	$idCurso = $_POST[$nombreIdCurso];
 	if($idCurso != "0")
 	{
-		$cCrearCurso .= "INSERT INTO interesadoxcurso(interesado_fk,curso_fk) (SELECT '$idInt','$idCurso' WHERE NOT EXISTS(SELECT 1 FROM interesadoxcurso WHERE interesado_fk='$idInt' AND curso_fk='$idCurso'));";
+		$cCrearCurso .= "INSERT INTO interesadoxcurso(interesado_fk,curso_fk) (SELECT '$idInt','$idCurso' WHERE NOT EXISTS(SELECT 1 FROM interesadoxcurso WHERE interesado_fk='$idInt' AND curso_fk='$idCurso' AND anulado='FALSE'));";
 	}
 }
 
@@ -83,7 +83,7 @@ if(trim($otros) != "")
 	else
 	{
 		$idCursoAgregar = $rCurso['id'];
-		$cCrearCurso .= "INSERT INTO interesadoxcurso(interesado_fk,curso_fk) (SELECT '$idInt','$idCursoAgregar' WHERE NOT EXISTS(SELECT 1 FROM interesadoxcurso WHERE interesado_fk='$idInt' AND curso_fk='$idCursoAgregar'));";
+		$cCrearCurso .= "INSERT INTO interesadoxcurso(interesado_fk,curso_fk) (SELECT '$idInt','$idCursoAgregar' WHERE NOT EXISTS(SELECT 1 FROM interesadoxcurso WHERE interesado_fk='$idInt' AND curso_fk='$idCursoAgregar' AND anulado='FALSE'));";
 	}
 }
 

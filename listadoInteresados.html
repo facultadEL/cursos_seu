@@ -69,7 +69,7 @@ function loadTable()
 		var a = interesadosToShow[i];
 
 		var vF = a.fechaRegistro.split('-');
-		console.log(a);
+		
 		htmlToAdd += `<tr>`;
 		htmlToAdd += `<td>${a.apellido}, ${a.nombre}</td>`;
 		htmlToAdd += `<td>${a.caracteristicaCel} - ${a.telefonoCel}</td>`;
@@ -78,7 +78,7 @@ function loadTable()
 		htmlToAdd += `<td>${a.localidad}</td>`;
 		htmlToAdd += `<td>${a.cursos}</td>`;
 		htmlToAdd += `<td>${vF[2]}/${vF[1]}/${vF[0]}</td>`;
-		htmlToAdd += `<td><button type="button" class="btn btn-success" onclick="agregarCurso('${a.dni}')"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><button type="button" class="btn btn-danger" onclick="openModalAnular('${i}')"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></td>`;
+		htmlToAdd += `<td><button type="button" class="btn btn-success" onclick="cargarCursos('${i}')"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><button type="button" class="btn btn-danger" onclick="openModalAnular('${i}')"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></td>`;
 		htmlToAdd += `</tr>`;
 	}
 
@@ -107,6 +107,104 @@ function openModalAnular(index)
 	$('#modalBody').html(htmlModal);
 
 	$('#myModal').modal('show');
+}
+
+function cargarCursos(index)
+{
+	$.ajax({
+		type: 'POST',
+		url: 'getCursosInteresado.php',
+		success: function(response)
+		{
+			var cursosJSON =  JSON.parse(response);
+			openModalAdd(cursosJSON,index);
+		},
+		error: function(msg)
+		{
+			alert('Contactese con el administrador');
+		}
+	});
+}
+function openModalAdd(cursos,index)
+{
+	htmlOptions = '<option value="0">Seleccione un Curso</option>';
+	for(var i = 0; i < cursos.length; i++)
+	{
+		htmlOptions += `<option value="${cursos[i].id}">${cursos[i].nombre}</option>`;
+	}
+	
+	var a = interesadosToShow[index];
+	htmlCurso = `<div class="row"><div class="col-xs-12 text-center"><strong>${a.nombre} ${a.apellido}</strong></div></div><br/>`;
+
+	for(var i = 1; i <= 5; i++)
+	{
+		if(i != 1)
+		{
+			htmlCurso += '<br/>';
+		}
+		htmlCurso += `<div class="row" id="headCurso${i}"><div class="form-group"><label for="curso${i}" class="control-label col-xs-2 col-sm-2 col-md-2 col-lg-2">Curso:</label>`;
+		htmlCurso += `<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10"><select class="form-control" name="curso${i}" id="curso${i}">`;
+		htmlCurso += htmlOptions;
+		htmlCurso += `</select></div></div></div>`;	
+	}
+	
+	
+	htmlCurso += `<input type="hidden" id="indexInteresadoAdd" value="${index}" />`;
+
+	$('#modalBodyAdd').html(htmlCurso);
+
+	$('#modalAdd').modal('show');
+}
+
+function confirmarAdd()
+{
+	var indexInt = $('#indexInteresadoAdd').val();
+	var idInteresado = interesadosToShow[indexInt].id;
+
+	var cursosToAdd = '';
+	for(var i = 1; i <= 5; i++)
+	{
+		var name = `#curso${i}`;
+		var val = $(name).val();
+		if(val != '0')
+		{
+			cursosToAdd += `${val}/--/`;
+		}
+	}
+	
+	
+	if(cursosToAdd != '')
+	{
+		var param = {
+			'id': idInteresado,
+			'cursos':cursosToAdd
+		};
+
+		$.ajax({
+			type:'POST',
+			url:'agregarCursos.php',
+			data:param,
+			success:function(response)
+			{
+				if(response[response.length - 1] == '1')
+				{
+					cargarInteresados();
+				}
+				else
+				{
+					alert('Error al agregar cursos');
+				}
+			},
+			error: function(msg)
+			{
+				alert(`Contactese con el administrador. Error: ${msg}`);
+			}
+		});
+		
+	}
+
+	$('#modalAdd').modal('hide');
+
 }
 
 function confirmarAnular()
@@ -288,6 +386,23 @@ $(document).ready(function(){
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 					<button type="button" class="btn btn-primary" onclick="confirmarAnular()">Confirmar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Agregar Curso</h4>
+				</div>
+				<div class="modal-body" id="modalBodyAdd">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary" onclick="confirmarAdd()">Confirmar</button>
 				</div>
 			</div>
 		</div>
