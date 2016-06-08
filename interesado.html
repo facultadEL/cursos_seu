@@ -36,7 +36,7 @@ function controlSubmit()
 	if(!controlVacio('#apellido')) return false;
 	//if(!controlVacio('#caracteristica')) return false;
 	//if(!controlVacio('#telefono')) return false;
-	if(!controlVacio('#mail')) return false;
+	//if(!controlVacio('#mail')) return false;
 
 	var otrosValues = $('#otros').val().trim();
 
@@ -313,7 +313,7 @@ $(document).ready(function(){
 					<div class="row">
 						<div class="form-group">
 							<label for="mail" class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-2">E-mail:</label>
-							<div class="col-xs-8 col-sm-10 col-md-10 col-lg-10"><input class="form-control" name="mail" type="text" id="mail" onkeydown="sacarColor(this)" required /></div>
+							<div class="col-xs-8 col-sm-10 col-md-10 col-lg-10"><input class="form-control" name="mail" type="text" id="mail" onkeydown="sacarColor(this)" /></div>
 						</div>
 					</div>
 					
