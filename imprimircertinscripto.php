@@ -25,15 +25,16 @@ $row4 = pg_fetch_array($sql);
 </style>
 <table width="100%" border="1" cellpadding="0" cellspacing="0">
   <tr>
-    <td width="167" valign="bottom"><p align="center"><img src="imprimircertinscripto_clip_image002.gif" alt="" width="50" height="47" /> <br />
+    <td width="186" valign="bottom"><p align="center"><img src="imprimircertinscripto_clip_image002.gif" alt="" width="50" height="47" /> <br />
       Facultad    Regional<br />
       Villa    Mar&iacute;a </p></td>
-    <td width="793"><p class="s"><strong>Curso:  
+    <td width="761"><p class="s"><strong>Curso:  
 <?=$row4["nomcurso"]?>
     </strong> </p></td>
+    <td width="127" align="center"> RE1-PE1-02-06</td>
   </tr>
   <tr>
-    <td colspan="2" valign="bottom"><table width="100%" border="0" cellspacing="6" cellpadding="0">
+    <td colspan="3" valign="bottom"><table width="100%" border="0" cellspacing="6" cellpadding="0">
       <tr>
         <td colspan="2" align="center"><strong><a href="imprimircuotas.php?inscriptosxcurso=<?=$inscripto?>" class="s">Talonario de Cuotas</a></strong></td>
         </tr>
