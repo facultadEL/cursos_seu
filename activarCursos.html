@@ -1,0 +1,109 @@
+<html>
+<head>
+<title> Listado Interesados </title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script>
+
+function getCursos()
+{
+    $.ajax({
+		type:'POST',
+		url:'getCursosActivar.php',
+		success:function(response) {
+            var r = JSON.parse(response);
+            successGetCursos(r);
+		},
+		error: function(msg) {
+			alert('No se pudo traer los cursos');
+		}
+	});
+}
+
+function successGetCursos(data)
+{
+    var htmlToAdd = '';
+
+    for(var i = 0; i < data.length; i++)
+    {
+        var c = data[i];
+        var anio = c.anio;
+        var datos = c.data;
+        htmlToAdd += '<tr><td colspan="2" class="text-center"><strong>'+anio+'</strong></td></tr>';
+        for(var j = 0; j < datos.length; j++)
+        {
+            var cO = datos[j];
+            
+            var bg = (cO.activado == 'f') ? 'danger' : '';
+            var btnAct = (cO.activado == 'f') ? '<button type="button" onclick="activarCurso('+cO.id+',\'t\')" class="btn btn-success">Activar</button>' : '<button type="button" onclick="activarCurso('+cO.id+',\'f\')" class="btn btn-danger">Desactivar</button>';
+            var nameTd = 'btnTd'+cO.id;
+
+            htmlToAdd += '<tr class="'+bg+'"><td>'+cO.nombre+'</td><td class="text-center" id="'+nameTd+'">'+btnAct+'</td></tr>';
+            
+
+        }
+    }
+
+    $('tbody').html(htmlToAdd);
+}
+
+function activarCurso(idC,activar)
+{
+    var param = {
+        "id": idC,
+        "activar": activar,
+    };
+
+    $.ajax({
+        type:"POST",
+        url:"actionActivarCursos.php",
+        data:param,
+        success:function(response) {
+            var r = JSON.parse(response)[0];
+            if(r.success == 't') {
+                var btnAct = (r.activar == 'f') ? '<button type="button" onclick="activarCurso('+r.id+',\'t\')" class="btn btn-success">Activar</button>' : '<button type="button" onclick="activarCurso('+r.id+',\'f\')" class="btn btn-danger">Desactivar</button>';
+                var nameTd = '#btnTd'+r.id;
+                $(nameTd).html(btnAct);
+            } else {
+                alert('Hubo un error al guardar');
+            }
+        },
+        error: function(msg) {
+            alert('Error al guardar');
+        }
+    });
+}
+
+$(document).ready(function(){
+	getCursos();
+});
+
+</script>
+</head>
+<body>
+<div class="container">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th  colspan="2" class="text-center">
+                    Listado de cursos
+                </th>
+            </tr>
+            <tr>
+                <th class="text-center">
+                    Curso
+                </th>
+                <th class="text-center">
+                    Acción
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
