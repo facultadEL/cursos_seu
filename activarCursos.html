@@ -40,8 +40,9 @@ function successGetCursos(data)
             var bg = (cO.activado == 'f') ? 'danger' : '';
             var btnAct = (cO.activado == 'f') ? '<button type="button" onclick="activarCurso('+cO.id+',\'t\')" class="btn btn-success">Activar</button>' : '<button type="button" onclick="activarCurso('+cO.id+',\'f\')" class="btn btn-danger">Desactivar</button>';
             var nameTd = 'btnTd'+cO.id;
+            var nameTr = 'tr'+cO.id;
 
-            htmlToAdd += '<tr class="'+bg+'"><td>'+cO.nombre+'</td><td class="text-center" id="'+nameTd+'">'+btnAct+'</td></tr>';
+            htmlToAdd += '<tr id="'+nameTr+'" class="'+bg+'"><td>'+cO.nombre+'</td><td class="text-center" id="'+nameTd+'">'+btnAct+'</td></tr>';
             
 
         }
@@ -66,7 +67,15 @@ function activarCurso(idC,activar)
             if(r.success == 't') {
                 var btnAct = (r.activar == 'f') ? '<button type="button" onclick="activarCurso('+r.id+',\'t\')" class="btn btn-success">Activar</button>' : '<button type="button" onclick="activarCurso('+r.id+',\'f\')" class="btn btn-danger">Desactivar</button>';
                 var nameTd = '#btnTd'+r.id;
+                var nameTr = '#tr'+r.id;
+
                 $(nameTd).html(btnAct);
+                
+                if(r.activar == 'f') {
+                    $(nameTr).addClass('danger');
+                } else {
+                    $(nameTr).removeClass('danger');
+                }
             } else {
                 alert('Hubo un error al guardar');
             }
